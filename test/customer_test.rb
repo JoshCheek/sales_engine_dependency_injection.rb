@@ -1,14 +1,17 @@
 class CustomerTest < Minitest::Test
-  def test_customer_normalizes_its_attrs_when_set
-    nil_cust = SalesEngine::Customer.new
+  def test_it_normalizes_its_attrs_when_set
+    db       = :not_a_db
+    nil_cust = SalesEngine::Customer.new db
 
-    raw_cust = SalesEngine::Customer.new id:         '1',
+    raw_cust = SalesEngine::Customer.new db,
+                                         id:         '1',
                                          first_name: 'Josh',
                                          last_name:  'Cheek',
                                          created_at: '2001-01-01 01:01:01 UTC',
                                          updated_at: '2002-02-02 02:02:02 UTC'
 
-    norm_cust = SalesEngine::Customer.new id:         1,
+    norm_cust = SalesEngine::Customer.new db,
+                                          id:         1,
                                           first_name: 'Josh',
                                           last_name:  'Cheek',
                                           created_at: DateTime.new(2001, 1, 1, 1, 1, 1),

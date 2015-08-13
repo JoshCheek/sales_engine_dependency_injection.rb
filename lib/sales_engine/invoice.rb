@@ -1,4 +1,5 @@
 require 'sales_engine/record'
+require 'sales_engine/customer'
 
 class SalesEngine
   class Invoice < Record
@@ -8,5 +9,7 @@ class SalesEngine
     attribute :status,      Symbol
     attribute :created_at,  DateTime
     attribute :updated_at,  DateTime
+
+    belongs_to :customer
   end
 end

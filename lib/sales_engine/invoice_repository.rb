@@ -14,7 +14,7 @@ class SalesEngine
 
     def find_by(critieria)
       row = db.find_by :invoices, critieria
-      Invoice.new row if row
+      Invoice.new db, row if row
     end
   end
 end

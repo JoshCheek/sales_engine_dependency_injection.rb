@@ -1,15 +1,18 @@
 class InvoiceTest < Minitest::Test
   def test_customer_normalizes_its_attrs_when_set
-    nil_cust = SalesEngine::Invoice.new
+    db       = :not_a_db
+    nil_cust = SalesEngine::Invoice.new db
 
-    raw_cust = SalesEngine::Invoice.new id:          '1',
+    raw_cust = SalesEngine::Invoice.new db,
+                                        id:          '1',
                                         customer_id: '2',
                                         merchant_id: '3',
                                         status:      'shipped',
                                         created_at:  '2001-01-01 01:01:01 UTC',
                                         updated_at:  '2002-02-02 02:02:02 UTC'
 
-    norm_cust = SalesEngine::Invoice.new id:          1,
+    norm_cust = SalesEngine::Invoice.new db,
+                                         id:          1,
                                          customer_id: 2,
                                          merchant_id: 3,
                                          status:      :shipped,

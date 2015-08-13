@@ -16,9 +16,7 @@ class SalesEngineTest < Minitest::Test
     assert_equal "Joey",     customer.first_name
     assert_equal "Ondricka", customer.last_name
 
-    customer = engine.customer_repository.find_by_first_name("Cecelia")
-    assert_equal 2,         customer.id
-    assert_equal "Cecelia", customer.first_name
-    assert_equal "Osinski", customer.last_name
+    invoices = customer.invoices
+
   end
 end

@@ -1,4 +1,5 @@
 require 'sales_engine/record'
+require 'sales_engine/invoice'
 
 class SalesEngine
   class Customer < Record
@@ -7,5 +8,7 @@ class SalesEngine
     attribute :last_name,  String
     attribute :created_at, DateTime
     attribute :updated_at, DateTime
+
+    has_many  :invoices
   end
 end
