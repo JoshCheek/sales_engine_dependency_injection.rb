@@ -19,6 +19,10 @@ class SalesEngine
       find_by last_name: last_name
     end
 
+    def find_all_by_first_name(first_name)
+      find_all_by first_name: first_name
+    end
+
     def random
       row = db.random :customers
       Customer.new *row if row
@@ -27,6 +31,11 @@ class SalesEngine
     def find_by(critieria)
       row = db.find_by(:customers, critieria)
       Customer.new *row if row
+    end
+
+    def find_all_by(critieria)
+      db.find_all_by(:customers, critieria)
+        .map { |row| Customer.new *row }
     end
   end
 end
