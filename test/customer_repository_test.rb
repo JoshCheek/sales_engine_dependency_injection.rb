@@ -19,10 +19,15 @@ class CustomerRepositoryTest < Minitest::Test
     engine_for(customers: customer_data).customer_repository
   end
 
+  def josh_created_at() Time.new 2001, 01, 01, 01, 01, 01 end
+  def josh_updated_at() Time.new 2002, 02, 02, 02, 02, 02 end
+  def matt_created_at() Time.new 2003, 03, 03, 03, 03, 03 end
+  def matt_updated_at() Time.new 2004, 04, 04, 04, 04, 04 end
+
   def repo1
     @engine1 ||= repo_for(
-      {id: 1, first_name: "Josh", last_name: "Cheek" },
-      {id: 2, first_name: "Matt", last_name: "Hecker"},
+      {id: 1, first_name: "Josh", last_name: "Cheek" , created_at: josh_created_at, updated_at: josh_updated_at},
+      {id: 2, first_name: "Matt", last_name: "Hecker", created_at: matt_created_at, updated_at: matt_updated_at},
     )
   end
 
@@ -42,6 +47,18 @@ class CustomerRepositoryTest < Minitest::Test
     assert_equal "Josh", repo1.find_by_last_name("Cheek" ).first_name
     assert_equal "Matt", repo1.find_by_last_name("Hecker").first_name
     refute               repo1.find_by_last_name("lkj"   )
+  end
+
+  def test_it_finds_by_created_at
+    assert_equal "Josh", repo1.find_by_created_at(josh_created_at).first_name
+    assert_equal "Matt", repo1.find_by_created_at(matt_created_at).first_name
+    refute               repo1.find_by_created_at(Time.now)
+  end
+
+  def test_it_finds_by_updated_at
+    assert_equal "Josh", repo1.find_by_updated_at(josh_updated_at).first_name
+    assert_equal "Matt", repo1.find_by_updated_at(matt_updated_at).first_name
+    refute               repo1.find_by_updated_at(Time.now)
   end
 
   def test_it_finds_random_records
