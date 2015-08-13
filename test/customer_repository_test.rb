@@ -33,4 +33,12 @@ class CustomerRepositoryTest < Minitest::Test
     assert_equal "Matt", engine.customer_repository.find_by_last_name("Hecker").first_name
     refute               engine.customer_repository.find_by_last_name("lkj"   )
   end
+
+  def test_it_finds_random_records
+    first_names = 100.times.map { engine.customer_repository.random.first_name }.uniq.sort
+    assert_equal ["Josh", "Matt"], first_names
+
+    # empty
+    refute SalesEngine.new(SalesEngine::MemoryDatabase.new).startup.customer_repository.random
+  end
 end

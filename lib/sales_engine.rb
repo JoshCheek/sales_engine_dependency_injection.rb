@@ -9,5 +9,6 @@ class SalesEngine
 
   def startup
     self.customer_repository = CustomerRepository.new(db)
+    self
   end
 end

@@ -19,6 +19,11 @@ class SalesEngine
       find_by last_name: last_name
     end
 
+    def random
+      row = db.random :customers
+      Customer.new *row if row
+    end
+
     def find_by(critieria)
       row = db.find_by(:customers, critieria)
       Customer.new *row if row

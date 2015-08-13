@@ -1,7 +1,12 @@
 class SalesEngine
   class MemoryDatabase
-    def initialize(table_data)
-      self.table_data = table_data
+    def initialize(table_data={})
+      table_data = table_data.dup
+
+      self.table_data = {
+        customers: table_data.delete(:customers)||[],
+      }
+      raise "DON'T KNOW WHAT TO DO WITH THIS: #{table_data.keys.inspect}" if table_data.any?
     end
 
     def find_by(table, criteria)
