@@ -12,6 +12,6 @@ module RepoHelpers
   end
 
   def repo_for(*customer_data)
-    engine_for(table_name => customer_data).customer_repository
+    engine_for(table_name => customer_data).__send__("#{table_name.to_s.chomp "s"}_repository")
   end
 end

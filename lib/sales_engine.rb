@@ -12,39 +12,56 @@ class SalesEngine < SalesEngine::Base
     require 'sales_engine/sqlite_database'
 
     self.db = SqliteDatabase.new(':memory:')
-    create_tables db.sqlite3
-    customers_csv = File.join csv_path, 'customers.csv'
-
-    rows = CSV.foreach(customers_csv, headers: true).map do |row|
-      [ row['id'].to_i,
-        row['first_name'],
-        row['last_name'],
-        row['created_at'],
-        row['updated_at'],
-      ]
-    end
-
-    rows.each_slice 500 do |slice|
-      escaped_row    = '(' << (slice.first||[]).map { '?' }.join(',') << ')'
-      escaped_values = slice.map { escaped_row }.join(',')
-      sql            = "INSERT INTO customers (id, first_name, last_name, created_at, updated_at) VALUES #{escaped_values};"
-      db.sqlite3.execute sql, slice
-    end
+    insert_customers db.sqlite3
+    insert_invoices  db.sqlite3
 
     super
   end
 
   private
 
-  def create_tables(sqlite3)
-    sqlite3.execute '
-      CREATE TABLE  customers (
+  def csv_path_to(table)
+    File.join csv_path, "#{table}.csv"
+  end
+
+  def insert_customers(sqlite3)
+    table_name = :customers
+    sqlite3.execute "
+      CREATE TABLE  #{table_name} (
         id INTEGER  PRIMARY KEY AUTOINCREMENT,
         first_name  TEXT,
         last_name   TEXT,
+        created_at  DATETIME,
+        updated_at  DATETIME
+      )
+    "
+    colnames, *rows = CSV.foreach(csv_path_to table_name).to_a
+    rows.each_slice 500 do |slice|
+      escaped_row    = '(' << (slice.first||[]).map { '?' }.join(',') << ')'
+      escaped_values = slice.map { escaped_row }.join(',')
+      sql            = "INSERT INTO #{table_name} (#{colnames.join(', ')}) VALUES #{escaped_values};"
+      sqlite3.execute sql, slice
+    end
+  end
+
+  def insert_invoices(sqlite3)
+    table_name = :invoices
+    sqlite3.execute "
+      CREATE TABLE #{table_name} (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer_id INTEGER,
+        merchant_id INTEGER,
+        status      TEXT,
         created_at  DATE,
         updated_at  DATE
       )
-    '
+    "
+    colnames, *rows = CSV.foreach(csv_path_to table_name).to_a
+    rows.each_slice 500 do |slice|
+      escaped_row    = '(' << (slice.first||[]).map { '?' }.join(',') << ')'
+      escaped_values = slice.map { escaped_row }.join(',')
+      sql            = "INSERT INTO #{table_name} (#{colnames.join(', ')}) VALUES #{escaped_values};"
+      sqlite3.execute sql, slice
+    end
   end
 end
