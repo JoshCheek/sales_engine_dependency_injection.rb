@@ -34,17 +34,17 @@ class SalesEngine
 
     def random
       row = db.random :customers
-      Customer.new *row if row
+      Customer.new row if row
     end
 
     def find_by(critieria)
       row = db.find_by(:customers, critieria)
-      Customer.new *row if row
+      Customer.new row if row
     end
 
     def find_all_by(critieria)
       db.find_all_by(:customers, critieria)
-        .map { |row| Customer.new *row }
+        .map { |row| Customer.new row }
     end
   end
 end

@@ -1,5 +1,5 @@
-require 'sales_engine'
 require 'sales_engine/memory_database'
+require 'sales_engine/sqlite_database'
 
 class CustomerRepositoryTest < Minitest::Test
   def db_path
@@ -31,8 +31,8 @@ class CustomerRepositoryTest < Minitest::Test
 
   def test_it_finds_records_by_an_attribute_and_table
     databases.each do |database|
-      assert_equal   1, database.find_by(:customers, id:  1).first
-      assert_equal   2, database.find_by(:customers, id:  2).first
+      assert_equal   1, database.find_by(:customers, id:  1).fetch(:id)
+      assert_equal   2, database.find_by(:customers, id:  2).fetch(:id)
       assert_equal nil, database.find_by(:customers, id: -1)
     end
   end
@@ -43,14 +43,14 @@ class CustomerRepositoryTest < Minitest::Test
       assert 1 < 10.times.map { database.random :customers }.uniq.length
 
       # format
-      assert_equal Fixnum, database.random(:customers)[0].class
+      assert_equal Fixnum, database.random(:customers).fetch(:id).class
     end
   end
 
   def test_it_finds_all_by_an_attribute_and_table
     databases.each do |database|
-      assert_equal [693, 746], database.find_all_by(:customers, first_name: 'Rosalia').map(&:first)
-      assert_equal [215, 331], database.find_all_by(:customers, last_name:  'Prosacco').map(&:first)
+      assert_equal [693, 746], database.find_all_by(:customers, first_name: 'Rosalia').map { |row| row.fetch :id }
+      assert_equal [215, 331], database.find_all_by(:customers, last_name:  'Prosacco').map { |row| row.fetch :id }
     end
   end
 end

@@ -1,11 +1,29 @@
 class SalesEngine
   class Customer
-    attr_accessor :id, :first_name, :last_name
+    attr_accessor :attributes
 
-    def initialize(id, first_name, last_name, created_at, updated_at)
-      self.id         = id
-      self.first_name = first_name
-      self.last_name  = last_name
+    def initialize(attributes)
+      self.attributes = attributes
+    end
+
+    def id
+      attributes[:id]
+    end
+
+    def first_name
+      attributes[:first_name]
+    end
+
+    def last_name
+      attributes[:last_name]
+    end
+
+    def created_at
+      attributes[:created_at]
+    end
+
+    def updated_at
+      attributes[:updated_at]
     end
   end
 end

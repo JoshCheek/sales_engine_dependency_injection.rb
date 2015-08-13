@@ -10,27 +10,23 @@ class SalesEngine
     end
 
     def find_by(table, criteria)
-      row = table_data[table].find do |row|
+      table_data[table].find do |row|
         criteria.all? do |attribute, value|
           row.fetch(attribute) == value
         end
       end
-      row.values if row
     end
 
     def find_all_by(table, criteria)
-      rows = table_data[table].select do |row|
+      table_data[table].select do |row|
         criteria.all? do |attribute, value|
           row.fetch(attribute) == value
         end
       end
-
-      rows.map(&:values)
     end
 
     def random(table)
-      row = table_data[table].sample
-      row.values if row
+      table_data[table].sample
     end
 
     private
