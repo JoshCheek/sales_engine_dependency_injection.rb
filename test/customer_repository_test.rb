@@ -1,22 +1,10 @@
-require 'sales_engine'
-require 'sales_engine/memory_database'
+require_relative 'test_helper'
 
 class CustomerRepositoryTest < Minitest::Test
-  def engine_for(table_data)
-    db = SalesEngine::MemoryDatabase.new(table_data)
-    SalesEngine::Base.new(db).startup
-  end
+  include RepoHelpers
 
-  def repo_for(*customer_data)
-    customer_data.map!.with_index 1 do |row, index|
-      { id:         row[:id]         || index,
-        first_name: row[:first_name] || 'n/a',
-        last_name:  row[:last_name]  || 'n/a',
-        created_at: row[:created_at] || Time.now,
-        updated_at: row[:updated_at] || Time.now,
-      }
-    end
-    engine_for(customers: customer_data).customer_repository
+  def table_name
+    :customers
   end
 
   def josh_created_at() Time.new 2001, 01, 01, 01, 01, 01 end
