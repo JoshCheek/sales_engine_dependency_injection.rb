@@ -1,4 +1,5 @@
 require 'sales_engine'
+require 'sales_engine/memory_database'
 
 class CustomerRepositoryTest < Minitest::Test
   def engine

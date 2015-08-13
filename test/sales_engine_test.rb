@@ -1,4 +1,5 @@
 require 'sales_engine'
+require 'sales_engine/sqlite_database'
 
 class SalesEngineTest < Minitest::Test
   def db_path
