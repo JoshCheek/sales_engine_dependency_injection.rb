@@ -18,6 +18,16 @@ class SalesEngine
       row.values if row
     end
 
+    def find_all_by(table, criteria)
+      rows = table_data[table].select do |row|
+        criteria.all? do |attribute, value|
+          row.fetch(attribute) == value
+        end
+      end
+
+      rows.map(&:values)
+    end
+
     def random(table)
       row = table_data[table].sample
       row.values if row

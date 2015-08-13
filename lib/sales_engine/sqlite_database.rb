@@ -15,6 +15,12 @@ class SalesEngine
       rows.first
     end
 
+    def find_all_by(table, criteria)
+      where_statements = criteria.keys.map { |column| "#{column} = (?)" }
+      sql              = "SELECT * from #{table} where #{where_statements.join ' and '};"
+      sqlite3.execute sql, *criteria.values
+    end
+
     def random(table)
       sqlite3.execute("SELECT * from #{table} ORDER BY random() LIMIT 1")
              .first
