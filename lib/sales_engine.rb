@@ -14,6 +14,7 @@ class SalesEngine < SalesEngine::Base
     self.db = SqliteDatabase.new(':memory:')
     insert_customers db.sqlite3
     insert_invoices  db.sqlite3
+    insert_transactions db.sqlite3
 
     super
   end
@@ -35,13 +36,7 @@ class SalesEngine < SalesEngine::Base
         updated_at  DATETIME
       )
     "
-    colnames, *rows = CSV.foreach(csv_path_to table_name).to_a
-    rows.each_slice 500 do |slice|
-      escaped_row    = '(' << (slice.first||[]).map { '?' }.join(',') << ')'
-      escaped_values = slice.map { escaped_row }.join(',')
-      sql            = "INSERT INTO #{table_name} (#{colnames.join(', ')}) VALUES #{escaped_values};"
-      sqlite3.execute sql, slice
-    end
+    load_csvs :customers
   end
 
   def insert_invoices(sqlite3)
@@ -56,12 +51,31 @@ class SalesEngine < SalesEngine::Base
         updated_at  DATE
       )
     "
+    load_csvs :invoices
+  end
+
+  def insert_transactions(sqlite3)
+    sqlite3.execute "
+      CREATE TABLE transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        invoice_id                  INTEGER,
+        credit_card_number          TEXT,
+        credit_card_expiration_date DATE,
+        result                      TEXT,
+        created_at                  DATE,
+        updated_at                  DATE
+      )
+    "
+    load_csvs :transactions
+  end
+
+  def load_csvs(table_name)
     colnames, *rows = CSV.foreach(csv_path_to table_name).to_a
     rows.each_slice 500 do |slice|
       escaped_row    = '(' << (slice.first||[]).map { '?' }.join(',') << ')'
       escaped_values = slice.map { escaped_row }.join(',')
       sql            = "INSERT INTO #{table_name} (#{colnames.join(', ')}) VALUES #{escaped_values};"
-      sqlite3.execute sql, slice
+      db.sqlite3.execute sql, slice
     end
   end
 end

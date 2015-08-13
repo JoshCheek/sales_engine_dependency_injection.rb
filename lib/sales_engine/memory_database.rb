@@ -4,8 +4,9 @@ class SalesEngine
       table_data = table_data.dup
 
       self.table_data = {
-        customers: table_data.delete(:customers) || [],
-        invoices:  table_data.delete(:invoices)  || [],
+        customers:    table_data.delete(:customers) || [],
+        invoices:     table_data.delete(:invoices)  || [],
+        transactions: table_data.delete(:transactions) || [],
       }
       raise "DON'T KNOW WHAT TO DO WITH THIS: #{table_data.keys.inspect}" if table_data.any?
     end

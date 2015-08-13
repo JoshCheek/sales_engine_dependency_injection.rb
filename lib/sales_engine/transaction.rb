@@ -11,8 +11,8 @@ class SalesEngine
     attribute :created_at,                  DateTime
     attribute :updated_at,                  DateTime
 
-    has_many  :invoices, table:       :invoices,
-                         foreign_key: :customer_id,
+    belongs_to :invoice, table:       :invoices,
+                         foreign_key: :invoice_id,
                          klass:       :Invoice
   end
 end
