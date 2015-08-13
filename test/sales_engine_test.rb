@@ -11,14 +11,14 @@ class SalesEngineTest < Minitest::Test
 
     engine.startup
 
-    customer = engine.customer_repository.find_by_first_name("Josh")
-    assert_equal 1,       customer.id
-    assert_equal "Josh",  customer.first_name
-    assert_equal "Cheek", customer.last_name
+    customer = engine.customer_repository.find_by_first_name("Joey")
+    assert_equal 1,          customer.id
+    assert_equal "Joey",     customer.first_name
+    assert_equal "Ondricka", customer.last_name
 
-    customer = engine.customer_repository.find_by_first_name("Matt")
-    assert_equal 2,        customer.id
-    assert_equal "Matt",   customer.first_name
-    assert_equal "Hecker", customer.last_name
+    customer = engine.customer_repository.find_by_first_name("Cecelia")
+    assert_equal 2,         customer.id
+    assert_equal "Cecelia", customer.first_name
+    assert_equal "Osinski", customer.last_name
   end
 end
