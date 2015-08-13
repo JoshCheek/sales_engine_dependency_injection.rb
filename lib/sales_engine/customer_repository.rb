@@ -3,6 +3,7 @@ require 'sales_engine/customer'
 class SalesEngine
   class CustomerRepository
     attr_accessor :db
+
     def initialize(db)
       self.db = db
     end

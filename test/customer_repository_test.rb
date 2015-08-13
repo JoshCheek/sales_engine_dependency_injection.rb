@@ -12,6 +12,8 @@ class CustomerRepositoryTest < Minitest::Test
       { id:         row[:id]         || index,
         first_name: row[:first_name] || 'n/a',
         last_name:  row[:last_name]  || 'n/a',
+        created_at: row[:created_at] || Time.now,
+        updated_at: row[:updated_at] || Time.now,
       }
     end
     engine_for(customers: customer_data).customer_repository
