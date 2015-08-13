@@ -2,6 +2,8 @@ require 'sqlite3'
 
 class SalesEngine
   class SqliteDatabase
+    attr_accessor :sqlite3
+
     def initialize(db_path)
       self.sqlite3 = SQLite3::Database.new(db_path)
     end
@@ -17,9 +19,5 @@ class SalesEngine
       sqlite3.execute("SELECT * from #{table} ORDER BY random() LIMIT 1")
              .first
     end
-
-    private
-
-    attr_accessor :sqlite3
   end
 end

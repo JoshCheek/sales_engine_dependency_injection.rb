@@ -2,13 +2,12 @@ require 'sales_engine'
 require 'sales_engine/sqlite_database'
 
 class SalesEngineTest < Minitest::Test
-  def db_path
-    File.expand_path "fixtures/sales_engine.db", __dir__
+  def csv_path
+    File.expand_path "fixtures", __dir__
   end
 
   def test_acceptance
-    db     = SalesEngine::SqliteDatabase.new(db_path)
-    engine = SalesEngine.new(db)
+    engine = SalesEngine.new(csv_path)
 
     engine.startup
 

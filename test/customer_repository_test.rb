@@ -10,7 +10,7 @@ class CustomerRepositoryTest < Minitest::Test
                    {id: 2, first_name: "Matt", last_name: "Hecker"},
                  ]
                )
-      engine = SalesEngine.new(db)
+      engine = SalesEngine::Base.new(db)
       engine.startup
       engine
     )
@@ -39,6 +39,6 @@ class CustomerRepositoryTest < Minitest::Test
     assert_equal ["Josh", "Matt"], first_names
 
     # empty
-    refute SalesEngine.new(SalesEngine::MemoryDatabase.new).startup.customer_repository.random
+    refute SalesEngine::Base.new(SalesEngine::MemoryDatabase.new).startup.customer_repository.random
   end
 end
