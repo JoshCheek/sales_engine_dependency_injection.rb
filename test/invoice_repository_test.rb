@@ -9,8 +9,8 @@ class InvoiceRepositoryTest < Minitest::Test
 
   def test_it_can_find_records_by_their_id
     repo = repo_for({id: 1, status: 'shipped'},
-                    {id: 2, status: 'not shipped'})
-    assert_equal 'shipped',     repo.find_by_id(1).status
-    assert_equal 'not shipped', repo.find_by_id(2).status
+                    {id: 2, status: 'not_shipped'})
+    assert_equal :shipped,     repo.find_by_id(1).status
+    assert_equal :not_shipped, repo.find_by_id(2).status
   end
 end
