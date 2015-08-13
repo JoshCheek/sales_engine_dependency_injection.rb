@@ -10,6 +10,8 @@ class SalesEngine
     attribute :created_at,  DateTime
     attribute :updated_at,  DateTime
 
-    belongs_to :customer
+    belongs_to  :customer, table:       :customers,
+                           foreign_key: :customer_id,
+                           klass:       :Customer
   end
 end

@@ -6,17 +6,17 @@ class SalesEngine
       define_method(name) { attribute name, type }
     end
 
-    def self.has_many(association)
+    def self.has_many(association, table:, foreign_key:, klass:)
       define_method association do
-        db.find_all_by(association, fk_to_me => id)
-          .map { |attrs| class_for(association).new(db, attrs) }
+        db.find_all_by(table, foreign_key => id)
+          .map { |attrs| SalesEngine.const_get(klass).new(db, attrs) }
       end
     end
 
-    def self.belongs_to(association)
+    def self.belongs_to(association, table:, foreign_key:, klass:)
       define_method association do
-        attrs = db.find_by class_for(association).table_name, id: fk_to(association)
-        class_for(association).new(db, attrs)
+        attrs = db.find_by table, id: attribute(foreign_key, Integer)
+        SalesEngine.const_get(klass).new(db, attrs)
       end
     end
 
@@ -49,18 +49,6 @@ class SalesEngine
       elsif klass == Symbol   && value.respond_to?(:to_sym) then value.to_sym
       else  raise "WAT: #{value.inspect} #{klass.inspect}"
       end
-    end
-
-    def class_for(table_name)
-      SalesEngine.const_get table_name.to_s.chomp("s").capitalize
-    end
-
-    def fk_to_me
-      :"#{table_name.to_s.chomp "s"}_id"
-    end
-
-    def fk_to(association)
-      attribute :"#{association}_id", Integer
     end
   end
 end
