@@ -13,6 +13,11 @@ class SalesEngine
       row.values if row
     end
 
+    def random(table)
+      row = table_data[table].sample
+      row.values if row
+    end
+
     private
 
     attr_accessor :table_data

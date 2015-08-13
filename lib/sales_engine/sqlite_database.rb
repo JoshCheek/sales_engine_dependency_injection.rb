@@ -13,6 +13,11 @@ class SalesEngine
       rows.first
     end
 
+    def random(table)
+      sqlite3.execute("SELECT * from #{table} ORDER BY random() LIMIT 1")
+             .first
+    end
+
     private
 
     attr_accessor :sqlite3
