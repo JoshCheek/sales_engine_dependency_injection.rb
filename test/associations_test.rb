@@ -32,4 +32,26 @@ class AssociationsTest < Minitest::Test
     assert_equal [2],    txn2.invoice.transactions.map(&:id)
   end
 
+
+  def test_customer_transactions
+    skip
+    engine = engine_for customers:    [ {id: 1},
+                                        {id: 2},
+                                      ],
+                        invoices:     [ {id: 11, customer_id: 1},
+                                        {id: 22, customer_id: 1},
+                                        {id: 33, customer_id: 2},
+                                      ],
+                        transactions: [ {id: 111, invoice_id: 11},
+                                        {id: 222, invoice_id: 22},
+                                        {id: 333, invoice_id: 33},
+                                        {id: 444, invoice_id: 44},
+                                      ]
+
+    cust1 = engine.customer_repository.find_by_id 1
+    cust2 = engine.transaction_repository.find_by_id 2
+
+    assert_equal [[1, 111] [1, 222]], cust1.transactions.map { |txn| [txn.invoice.customer.id, txn.id] }
+    assert_equal [[2, 333] [2, 444]], cust1.transactions.map { |txn| [txn.invoice.customer.id, txn.id] }
+  end
 end
